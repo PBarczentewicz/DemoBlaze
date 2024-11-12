@@ -9,19 +9,27 @@ import io.restassured.specification.RequestSpecification;
 
 public class Login {
 
-    public void logIn (String username, String password) {
+    public String logIn(String username, String password) {
         LoginRequest loginBody = LoginRequest.builder()
                 .username(username)
                 .password(password)
                 .build();
 
         RestAssured.baseURI = "https://www.demoblaze.com/index.html";
-        RequestSpecification request = RestAssured.given().config(RestAssured.config()
-                .objectMapperConfig(new ObjectMapperConfig(ObjectMapperType.GSON)))
+
+        RequestSpecification request = RestAssured.given()
+                .config(RestAssured.config()
+                        .objectMapperConfig(new ObjectMapperConfig(ObjectMapperType.GSON)))
                 .contentType(ContentType.JSON)
                 .body(loginBody);
 
-        Response response =request.post();
-        System.out.println("to jest response: " + response.getBody());
+        Response response = request.post();
+        if (response.getStatusCode() == 200) {
+            Item item = response.as(Item.class);
+            return item.getToken();
+        } else {
+            System.out.println("logowanie nie jest poprawne");
+            return null;
+        }
     }
 }
