@@ -1,13 +1,9 @@
 package org.example.login;
 
 public class LoginResponse {
-    Item item;
+    String Auth_token;
 
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
+    public String getAuth_token() {
+        return Auth_token;
     }
 }
